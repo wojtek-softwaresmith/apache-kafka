@@ -18,20 +18,20 @@ public class ContentController {
     @Value(value = "${kafka.topic.name}")
     private String topicName;
 
-    private final KafkaProducer messageProducer;
+    private final KafkaProducer kafkaProducer;
 
-    public ContentController(KafkaProducer messageProducer) {
-        this.messageProducer = messageProducer;
+    public ContentController(KafkaProducer kafkaProducer) {
+        this.kafkaProducer = kafkaProducer;
     }
 
     @PostMapping("/content")
-    public ResponseEntity<String> sendMessage(@RequestBody String content, HttpServletRequest request) {
+    public ResponseEntity<Void> sendMessage(@RequestBody String content, HttpServletRequest request) {
 
         String clientIpAddress = SecurityUtils.getClientIpAddress(request);
         String userAgentHeader = request.getHeader("user-agent");
 
-        messageProducer.sendPayload(topicName, new Payload(content, clientIpAddress, userAgentHeader));
-        String response = "Message sent to Kafka Topic: ${$kafka.topic.name} successfully.";
-        return ResponseEntity.ok(response);
+        kafkaProducer.sendPayload(topicName, new Payload(content, clientIpAddress, userAgentHeader));
+
+        return ResponseEntity.noContent().build();
     }
 }
