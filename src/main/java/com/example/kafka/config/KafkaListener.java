@@ -10,7 +10,7 @@ public class KafkaListener {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @org.springframework.kafka.annotation.KafkaListener(topics = "${kafka.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
+    @org.springframework.kafka.annotation.KafkaListener(topics = "${application.kafka.topic-name}", groupId = "${application.kafka.group-id}")
     public void handlePayload(Payload payload) {
         log.info(STR."Payload received: \{payload}");
     }
